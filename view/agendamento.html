@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <title>Agendamento - Cadastro</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/icon-x" href="img/">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="../js/jquery-3.2.1.min.js"></script>
+  <style type="text/css">
+    body{
+      background-color: #353535;
+      background-attachment: fixed;
+      background-size: 100% 100%;
+    }
+    label{
+      font-weight: bold;
+    }
+    .container{
+      box-shadow: 0px 0px 10px black;
+      max-width: 750px;
+      background-color: white;
+      padding: 40px;
+    }
+    #agendamento{
+      display: none;
+    }
+    #horario{
+      display: none;
+    }
+    #erro{
+      display: none;
+    }
+    #erro_horario{
+      display: none;
+    }
+    #existente{
+      display: none;
+    }
+    #erro_data{
+      display: none;
+    }
+    #campos{
+      display: none;
+    }
+    .form-control .cpf_cnpj{
+      outline:none;
+    }
+    #spanInvalido{
+      color: red;
+      font-size: 13px;
+    }
+    #spanValido{
+      color: green;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- <img src="img/" style="width: 80px; float: right;"> -->
+  
+  <h2>Agendar Atendimento</h2>
+
+  <br>
+ 
+  <h4>Passo-a-passo</h4>
+
+  <label style="font-weight: normal;">• Preencha o formulário com os <strong>dados pessoais do solicitante</strong>;</label>
+  <br>
+  <label style="font-weight: normal;">• Escolha o serviço desejado;</label>
+  <br>
+  <label style="font-weight: normal;">• Selecione a data e horário disponíveis;</label>
+  <br>
+  <label style="font-weight: normal;">• Verifique as informações inseridas e clique em “Confirmar”;</label>
+  <br>
+  <label style="font-weight: normal;">• Em seguida será enviado um e-mail com os dados do agendamento (caso tenha cadastrado um e-mail);</label>
+  <br>
+  <label style="font-weight: normal;">• Compareça com a documentação necessária ao local na data e horário agendado.</label>
+  <br>
+  <br>
+
+
+  <p style="color: red; font-style: italic">*Campos de preenchimento obrigatório</p>
+  <form id="cadastrar_agendamento">
+    <div class="form-group">
+      <label for="nome">Nome completo do Beneficiário:<label style="color: red;">*</label></label>
+      <input type="text" class="form-control" id="nome" name="nome">
+    </div>
+
+    <div class="form-group" style="width: 200px;">
+      <label for="dataNasc">Data de Nascimento:<label style="color: red;">*</label></label>
+      <input type="date" class="form-control" id="dataNasc" name="dataNasc">
+    </div>
+
+    <div class="form-group">
+      <label for="mae">Nome da mãe:<label style="color: red;">*</label></label>
+      <input type="text" class="form-control" id="mae" name="mae">
+    </div>
+
+    <div class="form-group">
+      <label for="pai">Nome do pai:</label>
+      <input type="text" class="form-control" id="pai" name="pai">
+    </div>
+
+    <div class="form-group">
+      <label for="email">E-mail:</label>
+      <input type="email" class="form-control" id="email" name="email">
+      <p style="font-size: 15px; color: #707070; font-style: italic;">Obs: Neste e-mail você receberá o resumo de sua solicitação de agendamento.</p>
+    </div>
+
+    <div class="form-group">
+      <label for="contato">Celular:<label style="color: red;">*</label></label>
+      <input type="text" class="form-control" id="celular" name="celular" maxlength="13" placeholder="DDD e Número" onKeyUp="mascara_celular()">
+    </div>
+
+    <div class="form-group">
+      <label for="rg">RG:<label style="color: red;">*</label></label>
+      <input type="text" class="form-control" id="rg" name="rg" maxlength="9">
+    </div>
+
+    <div class="form-group">
+      <label for="cpf">CPF:<label style="color: red;">*</label></label>
+      <input type="text" class="form-control cpf_cnpj" id="cpf" name="cpf" maxlength="14">
+    </div>
+    <span id="spanInvalido"></span>
+    <span id="spanValido"></span>
+
+    <br>
+    <br>
+
+    <div class="form-group">
+      <label for="categoria">Categoria:</label>
+      <select class="form-control" id="categoria" name="categoria" onchange="exibir_categoria();"></select>
+    </div>
+
+    <p id="instrucoes" style="background-color: #ededed; border-radius: 5px; padding: 20px;"></p>
+
+    <div id="agendamento">
+
+    <div class="form-group" style="width: 200px;">
+      <label for="dataNasc">Data de Agendamento:<label style="color: red;">*</label></label>
+      <input type="date" class="form-control" id="dataAg" name="dataAg" onchange="exibir_horarios();">
+    </div>
+    <p style="font-size: 15px; color: #707070; font-style: italic;">Obs: Não realizamos atendimento na Central do Cartão Legal aos domingos.</p>
+
+
+    <div id="erro_data" class="alert alert-danger">
+      <strong>Data Indisponível!</strong> Data indisponível para o serviço selecionado.
+    </div>
+
+    <div id="horario">
+
+    <div class="form-group">
+      <label for="dataNasc">Horário:<label style="color: red;">*</label></label>
+      <br>
+    </div>
+
+    <div id="lista_horarios"></div>
+
+    <br>
+
+    <h5>Horário selecionado: <label id="horario_selecionado"></label></h5>
+
+    <input type="text" name="hr" id="hr" style="display: none;">
+
+    </div>
+    
+    </div>
+
+    <br>
+    <br>
+
+    <div class="modal fade" id="myModal" role="dialog">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Agendamento Realizado!</h5>
+          </div>
+          <div class="modal-body">
+            <p id="info"></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button type="button" class="btn btn-info btn-lg" id="modal" data-toggle="modal" data-target="#myModal" style="display: none;"></button>
+   
+    <button type="submit" class="btn btn-primary" id="confirmar" onclick="this.disabled=true;">Confirmar</button>
+
+    <br>
+    <br>
+
+    <div id="erro" class="alert alert-danger">
+      <strong>OPS!</strong> Não foi possível cadastrar o agendamento, tente novamente ou entre em contato conosco.
+    </div>
+    <div id="erro_horario" class="alert alert-danger">
+      <strong>Horário Indisponível!</strong> O horário ficou indisponível enquanto realizava o cadastro. Selecione outro horário.
+    </div>
+    <div id="existente" class="alert alert-danger">
+      <strong>Atenção!</strong> Você já possui um agendamento nessa data, para cancelar e solicitar um novo agendamento <a href="consulta_cancelamento.html">CLIQUE AQUI</a>
+    </div>
+    <div id="campos" class="alert alert-warning">
+      Preencha todos os campos <strong>obrigatórios</strong> para finalizar a solicitação.
+    </div>
+
+  </form>
+</div>
+
+<script type="text/javascript" src="../js/horario_selecionado.js"></script>
+<script type="text/javascript" src="../js/getHorarios.js"></script>
+<script type="text/javascript" src="../js/getCategoriaInstrucoes.js"></script>
+<script type="text/javascript" src="../js/getCategorias.js"></script>
+<script type="text/javascript" src="../js/cadastrarAgendamento.js"></script>
+<script type="text/javascript" src="../js/valida_cpf_cnpj.js"></script>
+<script type="text/javascript" src="../js/pinta_campo.js"></script>
+<script type="text/javascript">
+  function mascara_celular() {
+      if(document.getElementById('celular').value.length == 2) {
+        document.getElementById('celular').value += ' ';
+      }
+      if(document.getElementById('celular').value.length == 8) {
+        document.getElementById('celular').value += '-';
+      }
+    }
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <title>Agendamento - Consulta/Cancelamento</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/icon-x" href="img/logo.png">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="../js/jquery-3.2.1.min.js"></script>
+  <style type="text/css">
+    body{
+      background-color: #353535;
+      background-attachment: fixed;
+      background-size: 100% 100%;
+    }
+    label{
+      font-weight: bold;
+    }
+    .container{
+      box-shadow: 0px 0px 10px black;
+      max-width: 750px;
+      background-color: white;
+      padding: 40px;
+    }
+    form{
+      float: left;
+    }
+    #dadosAgendamento{
+      display: none;
+      width: 60%;
+      background-color: #ededed;
+      border-radius: 5px; 
+      padding: 20px;
+      float: left;
+      margin: 20px; 
+    }
+    #caixa{
+      width: 100%;
+      height: 800px;
+    }
+    #info{
+      display: none;
+    }
+    #erro{
+      display: none;
+    }
+    #campos{
+      display: none;
+    }
+    #sucesso{
+      display: none;
+    }
+    #cancelado{
+      display: none;
+    }
+    .form-control .cpf_cnpj{
+      outline:none;
+    }
+    #spanInvalido{
+      color: red;
+      font-size: 13px;
+    }
+    #spanValido{
+      color: green;
+      font-size: 13px;
+    }
+    @media screen and (max-width: 680px){
+
+      #dadosAgendamento{
+        width: 110%;
+        margin-left: -20px;
+      }
+
+    }
+    
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- <img src="img/" style="width: 80px; float: right;"> -->
+
+  <h1>Consultar/ Cancelar</h1>
+  <br>
+
+  <p>Para consultar seu agendamento, preencha os dados abaixo.</p>
+
+  <div id="caixa">
+
+  <form id="consultar_cancelar">
+
+    <div class="form-group" style="width: 200px;">
+      <label for="cpf">CPF:</label>
+      <input type="text" class="form-control cpf_cnpj" id="cpf" name="cpf" maxlength="14">
+    </div>
+    <span id="spanInvalido"></span>
+    <span id="spanValido"></span>
+
+    <br>
+    <br>
+
+    <button type="submit" class="btn btn-dark" id="buscar">Buscar</button>
+
+    <br>
+    <br>
+
+    <div id="info" class="alert alert-info">
+      Você não possui nenhum agendamento solicitado.
+    </div>
+    <div id="cancelado" class="alert alert-danger">
+    <strong>Cancelado!</strong> Seu agendamento encontra-se cancelado. Solicite um novo agendamento.
+  </div>
+
+  </form>
+
+    <div id="dadosAgendamento">
+      <input type="text" name="id" id="id" style="display: none;">
+      <label style="font-size: 20px;">Protocolo:</label>
+      <label style="font-size: 20px; color: #154cb3;" id="protocolo"></label>
+      <br>
+      <label>Atendimento:</label>
+      <label style="font-weight:normal;" id="atendimento"></label>
+      <br>
+      <label>Nome:</label>
+      <label style="font-weight:normal;" id="nome"></label>
+      <br>
+      <label>Data de nascimento:</label>
+      <label style="font-weight:normal;" id="dataNasc"></label>
+      <br>
+      <label>Nome da mãe:</label>
+      <label style="font-weight:normal;" id="mae"></label>
+      <br>
+      <label>Nome do pai:</label>
+      <label style="font-weight:normal;" id="pai"></label>
+      <br>
+      <br>
+      <label>Data Agendada:</label>
+      <label style="font-weight:normal;" id="dataAg"></label>
+      <br>
+      <label>Horário:</label>
+      <label style="font-weight:normal;" id="horario"></label>
+
+      <br>
+
+      <button type="submit" class="btn btn-danger" id="cancelar" onclick="cancelar_agendamento();">Cancelar Agendamento</button>
+      <button type="submit" class="btn btn-primary" id="imprimir" onclick="print();">Imprimir <i class='fas fa-print' style='color:white'></i></button>
+    </div>
+
+  </div>  
+
+  </div>
+  
+
+<script type="text/javascript" src="../js/valida_cpf_cnpj.js"></script>
+<script type="text/javascript" src="../js/pinta_campo.js"></script>
+<script type="text/javascript" src="../js/buscarDadosCliente.js"></script>
+<script>
+  function cancelar_agendamento(){
+
+    var protocolo = document.getElementById('id').value;
+
+    var r = confirm("Tem certeza que deseja cancelar o agendamento?");
+      if (r == true) {
+        location.href='../controller/cancelarAgendamento.php?protocolo='+protocolo;
+      } else {
+
+    }
+  }
+</script>
+
+</body>
+</html>
